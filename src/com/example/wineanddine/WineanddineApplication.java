@@ -6,6 +6,7 @@ import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.MenuBar.MenuItem;
+import com.vaadin.ui.themes.Runo;
 
 public class WineanddineApplication extends Application {
 	
@@ -14,6 +15,7 @@ public class WineanddineApplication extends Application {
 
 	@Override
 	public void init() {
+		setTheme("runo");
 		final Window mainWindow = new Window("Beer and Wine");
 		MenuBar menubar = new MenuBar();
 		MenuBar.MenuItem home = menubar.addItem("Home", null, null);
@@ -67,11 +69,13 @@ public class WineanddineApplication extends Application {
 			MenuBar.MenuItem bevearages_beer = bevearages.addItem("Beer", null, null);
 			MenuBar.MenuItem bevearages_whiskey = bevearages.addItem("Whiskey", null, null);
 		
+		/** mainWindow.addComponent(menubar); */
+		Panel main = new Panel("Beer and Wine");
+		
 		mainWindow.addComponent(menubar);
-		Label menu = new Label("Beer and Wine");
+		mainWindow.addComponent(main);
 		
 		
-		mainWindow.addComponent(menu);
 		final Table table = new Table();
 		table.addContainerProperty("Name", String.class, null);
 		table.addContainerProperty("Department", String.class, null);
@@ -98,8 +102,10 @@ public class WineanddineApplication extends Application {
 		table.setColumnCollapsingAllowed(true);
 		table.setWidth("500px");
 		
-		mainWindow.addComponent(table);
-		mainWindow.addComponent(current);
+		/** mainWindow.addComponent(table); */
+		/** mainWindow.addComponent(current); */
+		main.addComponent(table);
+		main.addComponent(current);
 		
 		Panel panel = new Panel("Log in");
 		panel.setWidth("200px");
@@ -107,7 +113,8 @@ public class WineanddineApplication extends Application {
 			panel.addComponent(new TextField("Username"));
 			panel.addComponent(new TextField("Password"));
 			panel.addComponent(new Button("Log in"));
-		mainWindow.addComponent(panel);
+		/** mainWindow.addComponent(panel); */
+		main.addComponent(panel);
 		
 		/** Create the Accordion */
 		Accordion accordion = new Accordion();
@@ -131,7 +138,8 @@ public class WineanddineApplication extends Application {
 		/** Triming */
 		AccPanel.getLayout().setSizeFull();
 		AccPanel.getLayout().setMargin(false);
-		mainWindow.addComponent(AccPanel);
+		/** mainWindow.addComponent(AccPanel); */
+		main.addComponent(AccPanel);
 				
 		setMainWindow(mainWindow);
 
