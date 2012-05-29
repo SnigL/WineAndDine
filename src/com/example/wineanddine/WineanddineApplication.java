@@ -6,11 +6,11 @@ import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.MenuBar.MenuItem;
-import com.vaadin.ui.themes.Runo;
 
 public class WineanddineApplication extends Application {
 	
 	protected Window mywindow;
+	protected Window loginWindow;
 	protected Property nameproperty;
 
 	@Override
@@ -54,6 +54,7 @@ public class WineanddineApplication extends Application {
 			        
 						public void buttonClick(ClickEvent event) {
 							mainWindow.removeWindow (mywindow);
+							mainWindow.showNotification("Saved");
 						}
 						
 			        });
@@ -68,13 +69,30 @@ public class WineanddineApplication extends Application {
 			MenuBar.MenuItem bevearages_wine = bevearages.addItem("Wine", null, null);
 			MenuBar.MenuItem bevearages_beer = bevearages.addItem("Beer", null, null);
 			MenuBar.MenuItem bevearages_whiskey = bevearages.addItem("Whiskey", null, null);
+		MenuBar.MenuItem logInMenuItem = menubar.addItem("Log in", new MenuBar.Command() {
+			
+			public void menuSelected(MenuItem selectedItem) {
+				loginWindow = new Window("Log in");
+				loginWindow.setHeight("200px");
+				loginWindow.setWidth("200px");
+		        loginWindow.setPositionX(200);
+		        loginWindow.setPositionY(100);
+				loginWindow.addComponent(new TextField("Username"));
+				loginWindow.addComponent(new TextField("Password"));
+				loginWindow.addComponent(new Button("Log in", new Button.ClickListener() {
+					
+					public void buttonClick(ClickEvent event) {
+						mainWindow.removeWindow(loginWindow);
+						mainWindow.showNotification("Logging in");
+					}
+				}));
+				mainWindow.addWindow(loginWindow);				
+			}
+		});
 		
-		/** mainWindow.addComponent(menubar); */
 		Panel main = new Panel("Beer and Wine");
-		
 		mainWindow.addComponent(menubar);
-		mainWindow.addComponent(main);
-		
+		mainWindow.addComponent(main);	
 		
 		final Table table = new Table();
 		table.addContainerProperty("Name", String.class, null);
@@ -102,47 +120,31 @@ public class WineanddineApplication extends Application {
 		table.setColumnCollapsingAllowed(true);
 		table.setWidth("500px");
 		
-		/** mainWindow.addComponent(table); */
-		/** mainWindow.addComponent(current); */
 		main.addComponent(table);
 		main.addComponent(current);
 		
-		Panel panel = new Panel("Log in");
-		panel.setWidth("200px");
-		
-			panel.addComponent(new TextField("Username"));
-			panel.addComponent(new TextField("Password"));
-			panel.addComponent(new Button("Log in"));
-		/** mainWindow.addComponent(panel); */
-		main.addComponent(panel);
-		
-		/** Create the Accordion */
-		Accordion accordion = new Accordion();
+		/*Accordion accordion = new Accordion();
 		accordion.setSizeFull();
 		
 		Label l1 = new Label("There are no previously saved actions.");
 		Label l2 = new Label("There are no saved notes.");
 		Label l3 = new Label("There are currently no issues.");
 		
-		/** Add the components as tabs in the Accordion. */
 		accordion.addTab(l1, "Saved Settings", null);
 		accordion.addTab(l2, "Notes", null);
 		accordion.addTab(l3, "Issues", null);
 		
-		/** Container for the Accordion */
 		Panel AccPanel = new Panel("Tasks");
 		AccPanel.setWidth("300px");
 		AccPanel.setHeight("300px");
 		AccPanel.addComponent(accordion);
 		
-		/** Triming */
 		AccPanel.getLayout().setSizeFull();
 		AccPanel.getLayout().setMargin(false);
-		/** mainWindow.addComponent(AccPanel); */
-		main.addComponent(AccPanel);
-				
+		main.addComponent(AccPanel);*/
+		
 		setMainWindow(mainWindow);
-
+		
 	}
 }	
 	
