@@ -1,5 +1,9 @@
 package com.example.wineanddine;
 
+import java.sql.DriverManager;
+
+import com.google.gwt.dev.generator.ast.Statement;
+import com.sun.corba.se.pept.transport.Connection;
 import com.vaadin.Application;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -15,8 +19,11 @@ public class WineanddineApplication extends Application {
 
 	@Override
 	public void init() {
+		/** Set maintheme to Runo */
 		setTheme("runo");
+		/** Main Window */
 		final Window mainWindow = new Window("Beer and Wine");
+		/** Initialization of the menubar */
 		MenuBar menubar = new MenuBar();
 		MenuBar.MenuItem home = menubar.addItem("Home", null, null);
 			MenuBar.MenuItem add_new = home.addItem("Add new", new MenuBar.Command() {
@@ -64,7 +71,7 @@ public class WineanddineApplication extends Application {
 					
 				}
 			});
-			
+			/** The rest of the menubar*/
 		MenuBar.MenuItem bevearages = menubar.addItem("Bevearages", null, null);
 			MenuBar.MenuItem bevearages_wine = bevearages.addItem("Wine", null, null);
 			MenuBar.MenuItem bevearages_beer = bevearages.addItem("Beer", null, null);
@@ -93,7 +100,7 @@ public class WineanddineApplication extends Application {
 		Panel main = new Panel("Beer and Wine");
 		mainWindow.addComponent(menubar);
 		mainWindow.addComponent(main);	
-		
+		/** Main table to show items */
 		final Table table = new Table();
 		table.addContainerProperty("Name", String.class, null);
 		table.addContainerProperty("Department", String.class, null);
@@ -102,15 +109,16 @@ public class WineanddineApplication extends Application {
 		table.setSelectable(true);
 		table.setImmediate(true);
 		
-		
+		/** Display marked item */
 		final Label current = new Label("Selected: -");
 		table.addListener(new Property.ValueChangeListener() {
 
 		public void valueChange(ValueChangeEvent event) {
 				current.setValue("Selected: " + table.getValue());
+				
 			}
 		});
-		
+		/** Added refdata */
 		table.addItem(new Object[] {
 			    "50&50","Red Whine","Italy","4"}, new String("50&50"));
 		table.addItem(new Object[] {
@@ -142,9 +150,28 @@ public class WineanddineApplication extends Application {
 		AccPanel.getLayout().setSizeFull();
 		AccPanel.getLayout().setMargin(false);
 		main.addComponent(AccPanel);*/
+		setMainWindow(mainWindow);		
 		
-		setMainWindow(mainWindow);
-		
+		createDatabase();
+	
+
+	}
+
+	private void createDatabase() {
+		String data = "jdbc:derby:presidents;create=true";
+		try {
+			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+			java.sql.Connection conn = DriverManager.getConnection(data);
+			java.sql.Statement st = conn.createStatement();
+			int result = st.executeUpdate("CREATE TABLE alcohol (dex INTEGER NOT NULL PRIMARY KEY "
+			          + "GENERATED ALWAYS AS identity (START WITH 1, INCREMENT BY 1), "
+			          + "name VARCHAR(40), department VARCHAR(40), country VARCHAR(40), rating VARCHAR(40)");
+			result = st.executeUpdate("INSERT INTO alcohol (name, department, country, rating"
+			          + ") VALUES('50&50','Red Whine', 1 , 'Italy', '4')");
+			st.close();
+		} catch (Exception e) {
+			
+		}
 	}
 }	
 	
