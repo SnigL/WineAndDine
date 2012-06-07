@@ -16,8 +16,6 @@ public class WineanddineApplication extends Application {
 	protected Window loginWindow;
 	protected Property nameproperty;
 	
-	private Connection c;
-
 	@Override
 	public void init() {
 		/** Set maintheme to Runo */
@@ -137,21 +135,10 @@ public class WineanddineApplication extends Application {
 				
 			}
 		});
-		/** Added refdata */
-		table.addItem(new Object[] {
-			    "50&50","Red Whine","Italy","4"}, new String("50&50"));
-		table.addItem(new Object[] {
-			    "A Mano","White Whine","Italy","2"}, new String("A Mano"));
-		table.addItem(new Object[] {
-			    "1698","Beer","Great Britain","5"}, new String("1698"));
-		table.setColumnCollapsingAllowed(true);
-		table.setWidth("500px"); 
 		
 		main.addComponent(table);
 		main.addComponent(current);
 	
 		setMainWindow(mainWindow);			
-
 	}
-	
 }	
