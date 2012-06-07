@@ -1,9 +1,8 @@
 package com.example.wineanddine;
 
-import java.sql.DriverManager;
+import java.sql.*;
+import java.sql.Connection;
 
-import com.google.gwt.dev.generator.ast.Statement;
-import com.sun.corba.se.pept.transport.Connection;
 import com.vaadin.Application;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -16,6 +15,8 @@ public class WineanddineApplication extends Application {
 	protected Window mywindow;
 	protected Window loginWindow;
 	protected Property nameproperty;
+	
+	private Connection c;
 
 	@Override
 	public void init() {
@@ -35,9 +36,9 @@ public class WineanddineApplication extends Application {
 			        mywindow.setPositionX(200);
 			        mywindow.setPositionY(100);
 			        
-			        TextField name = new TextField("Name: ");
+			        final TextField name = new TextField("Name: ");
 			        mywindow.addComponent(name);
-			        Select department = new Select("Department");
+			        final Select department = new Select("Department");
 			        	department.addItem("Red Wine");
 			        	department.addItem("White Wine");
 			        	department.addItem("Rose Whine");
@@ -47,9 +48,9 @@ public class WineanddineApplication extends Application {
 			        	department.addItem("Gin");		 
 			        department.setNullSelectionAllowed(false);
 			        mywindow.addComponent(department);
-			        TextField country = new TextField("Country:");
+			        final TextField country = new TextField("Country:");
 			        mywindow.addComponent(country);
-			        Select rating = new Select("Rating: ");
+			        final Select rating = new Select("Rating: ");
 			        	rating.addItem("5");
 			        	rating.addItem("4");
 			        	rating.addItem("3");
@@ -60,9 +61,27 @@ public class WineanddineApplication extends Application {
 			        Button save = new Button("Save", new Button.ClickListener() {
 			        
 						public void buttonClick(ClickEvent event) {
+							Connection con = null;
+							String dbUrl = "jdbc:mysql://localhost:3306/";
+							String db = "wineanddine";
+							String driver = "com.mysql.jdbc.Driver";
+							try {
+								Class.forName(driver);
+								con = DriverManager.getConnection(dbUrl + db, "root", "");
+								try {
+									Statement st = con.createStatement();
+									int val = st.executeUpdate("INSERT INTO alcohol VALUES('"+name+"', '"+country+"', '"+department+"', '"+rating+"')");
+									
+								} catch (SQLException s) {
+									
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
+						}
 							mainWindow.removeWindow (mywindow);
 							mainWindow.showNotification("Saved");
 						}
+						
 						
 			        });
 			        mywindow.addComponent(save);
@@ -108,7 +127,7 @@ public class WineanddineApplication extends Application {
 		table.addContainerProperty("Rating", String.class, null);
 		table.setSelectable(true);
 		table.setImmediate(true);
-		
+		 		
 		/** Display marked item */
 		final Label current = new Label("Selected: -");
 		table.addListener(new Property.ValueChangeListener() {
@@ -126,52 +145,13 @@ public class WineanddineApplication extends Application {
 		table.addItem(new Object[] {
 			    "1698","Beer","Great Britain","5"}, new String("1698"));
 		table.setColumnCollapsingAllowed(true);
-		table.setWidth("500px");
+		table.setWidth("500px"); 
 		
 		main.addComponent(table);
 		main.addComponent(current);
-		
-		/*Accordion accordion = new Accordion();
-		accordion.setSizeFull();
-		
-		Label l1 = new Label("There are no previously saved actions.");
-		Label l2 = new Label("There are no saved notes.");
-		Label l3 = new Label("There are currently no issues.");
-		
-		accordion.addTab(l1, "Saved Settings", null);
-		accordion.addTab(l2, "Notes", null);
-		accordion.addTab(l3, "Issues", null);
-		
-		Panel AccPanel = new Panel("Tasks");
-		AccPanel.setWidth("300px");
-		AccPanel.setHeight("300px");
-		AccPanel.addComponent(accordion);
-		
-		AccPanel.getLayout().setSizeFull();
-		AccPanel.getLayout().setMargin(false);
-		main.addComponent(AccPanel);*/
-		setMainWindow(mainWindow);		
-		
-		createDatabase();
 	
+		setMainWindow(mainWindow);			
 
 	}
-
-	private void createDatabase() {
-		String data = "jdbc:derby:presidents;create=true";
-		try {
-			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-			java.sql.Connection conn = DriverManager.getConnection(data);
-			java.sql.Statement st = conn.createStatement();
-			int result = st.executeUpdate("CREATE TABLE alcohol (dex INTEGER NOT NULL PRIMARY KEY "
-			          + "GENERATED ALWAYS AS identity (START WITH 1, INCREMENT BY 1), "
-			          + "name VARCHAR(40), department VARCHAR(40), country VARCHAR(40), rating VARCHAR(40)");
-			result = st.executeUpdate("INSERT INTO alcohol (name, department, country, rating"
-			          + ") VALUES('50&50','Red Whine', 1 , 'Italy', '4')");
-			st.close();
-		} catch (Exception e) {
-			
-		}
-	}
+	
 }	
-	
