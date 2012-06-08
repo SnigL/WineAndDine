@@ -1,11 +1,9 @@
 package com.example.wineanddine;
 
 import java.sql.*;
-import java.sql.Connection;
-
 import com.vaadin.Application;
 import com.vaadin.data.Property;
-import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.util.QueryContainer;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.MenuBar.MenuItem;
@@ -78,9 +76,7 @@ public class WineanddineApplication extends Application {
 						}
 							mainWindow.removeWindow (mywindow);
 							mainWindow.showNotification("Saved");
-						}
-						
-						
+						}				
 			        });
 			        mywindow.addComponent(save);
 			        
@@ -117,28 +113,28 @@ public class WineanddineApplication extends Application {
 		Panel main = new Panel("Beer and Wine");
 		mainWindow.addComponent(menubar);
 		mainWindow.addComponent(main);	
-		/** Main table to show items */
-		final Table table = new Table();
-		table.addContainerProperty("Name", String.class, null);
-		table.addContainerProperty("Department", String.class, null);
-		table.addContainerProperty("Country", String.class, null);
-		table.addContainerProperty("Rating", String.class, null);
-		table.setSelectable(true);
-		table.setImmediate(true);
-		 		
-		/** Display marked item */
-		final Label current = new Label("Selected: -");
-		table.addListener(new Property.ValueChangeListener() {
-
-		public void valueChange(ValueChangeEvent event) {
-				current.setValue("Selected: " + table.getValue());
-				
+		/** Main table to show items from database */
+		String dbUrlnew = "jdbc:mysql://localhost:3306/";
+		String dbnew = "wineanddine";
+		String driver = "com.mysql.jdbc.Driver";
+		Table tblDataModel = null;
+		try {
+			try {
+				Class.forName(driver);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
 			}
-		});
-		
-		main.addComponent(table);
-		main.addComponent(current);
-	
-		setMainWindow(mainWindow);			
+			Connection conn = DriverManager.getConnection(dbUrlnew + dbnew, "root", "");
+			QueryContainer qcSQL = new QueryContainer("SELECT * FROM alcohol", conn);
+			tblDataModel = new Table();
+			tblDataModel.setContainerDataSource(qcSQL);
+			tblDataModel.setVisible(true);
+			tblDataModel.setEnabled(true);
+			tblDataModel.setSelectable(true);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+		setMainWindow(mainWindow);
+		main.addComponent(tblDataModel);
 	}
 }	
