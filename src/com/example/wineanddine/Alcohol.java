@@ -1,34 +1,34 @@
 package com.example.wineanddine;
 
 public class Alcohol {
-	static String name;
-	String department;
-	String country;
-	Integer rating;
+	static String alcoholName;
+	String alcoholDepartment;
+	String alcoholCountry;
+	Integer alcoholRating;
 	
 	public static String getName() {
-		return name;
+		return alcoholName;
 	}
 	public void setName(String name) {
-		this.name = name;
+		this.alcoholName = name;
 	}
 	public String getDepartment() {
-		return department;
+		return alcoholDepartment;
 	}
 	public void setDepartment(String department) {
-		this.department = department;
+		this.alcoholDepartment = department;
 	}
 	public String getCountry() {
-		return country;
+		return alcoholCountry;
 	}
 	public void setCountry(String country) {
-		this.country = country;
+		this.alcoholCountry = country;
 	}
 	public Integer getRating() {
-		return rating;
+		return alcoholRating;
 	}
 	public void setRating(Integer rating) {
-		this.rating = rating;
+		this.alcoholRating = rating;
 	}
 	
 }

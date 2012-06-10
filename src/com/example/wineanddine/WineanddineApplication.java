@@ -10,7 +10,7 @@ import com.vaadin.ui.MenuBar.MenuItem;
 
 public class WineanddineApplication extends Application {
 	
-	protected Window mywindow;
+	protected Window addNewWindow;
 	protected Window loginWindow;
 	protected Property nameproperty;
 	
@@ -26,34 +26,34 @@ public class WineanddineApplication extends Application {
 			MenuBar.MenuItem add_new = home.addItem("Add new", new MenuBar.Command() {
 				
 				public void menuSelected(MenuItem selectedItem) {
-					mywindow = new Window("Add new");
-					mywindow.setHeight("400px");
-					mywindow.setWidth("400px");
-			        mywindow.setPositionX(200);
-			        mywindow.setPositionY(100);
+					addNewWindow = new Window("Add new");
+					addNewWindow.setHeight("400px");
+					addNewWindow.setWidth("400px");
+			        addNewWindow.setPositionX(200);
+			        addNewWindow.setPositionY(100);
 			        
-			        final TextField name = new TextField("Name: ");
-			        mywindow.addComponent(name);
-			        final Select department = new Select("Department");
-			        	department.addItem("Red Wine");
-			        	department.addItem("White Wine");
-			        	department.addItem("Rose Whine");
-			        	department.addItem("Beer");
-			        	department.addItem("Whiskey");
-			        	department.addItem("Calvados");
-			        	department.addItem("Gin");		 
-			        department.setNullSelectionAllowed(false);
-			        mywindow.addComponent(department);
-			        final TextField country = new TextField("Country:");
-			        mywindow.addComponent(country);
-			        final Select rating = new Select("Rating: ");
-			        	rating.addItem("5");
-			        	rating.addItem("4");
-			        	rating.addItem("3");
-			        	rating.addItem("2");
-			        	rating.addItem("1");
-			        rating.setNullSelectionAllowed(false);
-			        mywindow.addComponent(rating);
+			        final TextField alcoholName = new TextField("Name: ");
+			        addNewWindow.addComponent(alcoholName);
+			        final Select alcoholDepartment = new Select("Department");
+			        	alcoholDepartment.addItem("Red Wine");
+			        	alcoholDepartment.addItem("White Wine");
+			        	alcoholDepartment.addItem("Rose Whine");
+			        	alcoholDepartment.addItem("Beer");
+			        	alcoholDepartment.addItem("Whiskey");
+			        	alcoholDepartment.addItem("Calvados");
+			        	alcoholDepartment.addItem("Gin");		 
+			        alcoholDepartment.setNullSelectionAllowed(false);
+			        addNewWindow.addComponent(alcoholDepartment);
+			        final TextField alcoholCountry = new TextField("Country:");
+			        addNewWindow.addComponent(alcoholCountry);
+			        final Select alcoholRating = new Select("Rating: ");
+			        	alcoholRating.addItem("5");
+			        	alcoholRating.addItem("4");
+			        	alcoholRating.addItem("3");
+			        	alcoholRating.addItem("2");
+			        	alcoholRating.addItem("1");
+			        alcoholRating.setNullSelectionAllowed(false);
+			        addNewWindow.addComponent(alcoholRating);
 			        Button save = new Button("Save", new Button.ClickListener() {
 			        
 						public void buttonClick(ClickEvent event) {
@@ -66,7 +66,7 @@ public class WineanddineApplication extends Application {
 								con = DriverManager.getConnection(dbUrl + db, "root", "");
 								try {
 									Statement st = con.createStatement();
-									int val = st.executeUpdate("INSERT INTO alcohol VALUES('"+name+"', '"+country+"', '"+department+"', '"+rating+"')");
+									int val = st.executeUpdate("INSERT INTO alcohol VALUES('"+alcoholName+"', '"+alcoholCountry+"', '"+alcoholDepartment+"', '"+alcoholRating+"')");
 									
 								} catch (SQLException s) {
 									
@@ -74,13 +74,13 @@ public class WineanddineApplication extends Application {
 							} catch (Exception e) {
 								e.printStackTrace();
 						}
-							mainWindow.removeWindow (mywindow);
+							mainWindow.removeWindow (addNewWindow);
 							mainWindow.showNotification("Saved");
 						}				
 			        });
-			        mywindow.addComponent(save);
+			        addNewWindow.addComponent(save);
 			        
-			        mainWindow.addWindow(mywindow);
+			        mainWindow.addWindow(addNewWindow);
 					
 				}
 			});
